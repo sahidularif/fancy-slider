@@ -31,20 +31,20 @@ const showImages = (images) => {
 const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
-    .then(data => showImages(data.hitS))
+    .then(data => showImages(data.hits))
     .catch(err => console.log(err))
 }
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.add('added');
- 
+  element.classList.toggle('added'); 
   let item = sliders.indexOf(img);
-  if (item === -1) {
+
+  if (item === -1) {  
     sliders.push(img);
-  } else {
-    alert('Hey, Already added !')
+  } else {   
+    sliders.pop(img);    
   }
 }
 var timer
@@ -57,8 +57,9 @@ const createSlider = () => {
   // crate slider previous next area
   sliderContainer.innerHTML = '';
   const prevNext = document.createElement('div');
-  prevNext.className = "prev-next d-flex w-100 justify-content-between align-items-center";
+  prevNext.className = "prev-next d-flex w-100 justify-content-between align-items-center image-box";
   prevNext.innerHTML = ` 
+  
   <span class="prev" onclick="changeItem(-1)"><i class="fas fa-chevron-left"></i></span>
   <span class="next" onclick="changeItem(1)"><i class="fas fa-chevron-right"></i></span>
   `;
@@ -67,7 +68,9 @@ const createSlider = () => {
   document.querySelector('.main').style.display = 'block';
   // hide image aria
   imagesArea.style.display = 'none';
-  const duration = document.getElementById('duration').value || 1000;
+  let duration = document.getElementById('duration').value || 1000;
+
+  console.log(duration);
   sliders.forEach(slide => {
     let item = document.createElement('div')
     item.className = "slider-item";
@@ -80,7 +83,7 @@ const createSlider = () => {
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
-  }, duration);
+  }, setDuration(duration));
 }
 
 // change slider index 
@@ -120,3 +123,50 @@ searchBtn.addEventListener('click', function () {
 sliderBtn.addEventListener('click', function () {
   createSlider()
 })
+
+// Slide duration
+function validate(event) {
+  if (event.key == "-") {
+    event.preventDefault();
+    return false;
+  }
+  
+}    
+
+function setDuration(duration){
+  if (duration>0 && duration<=10){
+    duration = duration * 1000;
+    return duration;
+  }
+  else{
+    duration =  document.getElementById('duration').value || 1000;
+    return duration;
+  }
+ 
+}
+// Keyboard enter press on search button
+
+document.getElementById('search').addEventListener("keypress", function(event){
+  //event.preventDefault();  
+  if(event.key == 'Enter'){
+    document.getElementById('search-btn').click();
+  }
+})
+// document.body.addEventListener("keypress", function(event){
+//   if(event.key == 'Enter'){
+//     document.getElementById('search-btn').click();
+//   }
+// })
+
+// Bonus Work
+// Image model box
+const imgBox = document.getElementsByClassName('image-box');
+imgBox.onclick = function (){
+  
+}
+// Spinner
+
+const toggleSpinner = () =>{
+const spinner = document.getElementById('loading-spinner');
+spinner.classList.toggle('d-block');
+}
