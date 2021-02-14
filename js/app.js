@@ -19,18 +19,21 @@ const showImages = (images) => {
   gallery.innerHTML = '';
   toggleSpinner();
   // show gallery title
+  
+  
   galleryHeader.style.display = 'flex';
   images.forEach(image => {
+    var imgId = image.webformatURL;
+    console.log(imgId);
     let div = document.createElement('div');
     div.className = 'col-md-3 img-item mb-2 d-flex';
     div.innerHTML = `<div id='img-container'>
-    <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}"> <a onclick="clicked()" id="zoom"><i class="fas fa-search-plus"></i></a>
+    <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}"> 
     </div>`;
     gallery.appendChild(div)
   })
 
 }
-
 const getImages = (query) => {
   toggleSpinner();
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
@@ -174,19 +177,10 @@ document.body.addEventListener("keypress", function(event){
 })
 
 
-// Bonus Work
-// Image model box
-const imgBox = document.getElementsByClassName('image-box');
-imgBox.onclick = function () {
 
-}
-// Spinner
+// Spinner || Bonus Work
 const toggleSpinner = () => {
   const spinner = document.getElementById('toggle-spinner');
   spinner.classList.toggle('d-none');
 }
 
-
-function clicked() {
-  console.log('someone clicked me');
-}
