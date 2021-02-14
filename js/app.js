@@ -125,8 +125,13 @@ searchBtn.addEventListener('click', function () {
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
   const search = document.getElementById('search');
-  getImages(search.value)
-  sliders.length = 0;
+  if(search.value !== '' || search.value >0){
+    getImages(search.value)
+  }
+  else{
+    gallery.innerHTML = "";
+    swal("Please Enter Your Favorite Image Keyword");
+  }
 })
 
 sliderBtn.addEventListener('click', function () {
@@ -143,7 +148,7 @@ function validate(event) {
 }
 
 function setDuration(duration) {
-  if (duration > 0 && duration <= 10) {
+  if (duration > 0 && duration < 100) {
     duration = duration * 1000;
     return duration;
   } 
@@ -162,11 +167,11 @@ document.getElementById('search').addEventListener("keypress", function (event) 
     document.getElementById('search-btn').click();
   }
 })
-// document.body.addEventListener("keypress", function(event){
-//   if(event.key == 'Enter'){
-//     document.getElementById('search-btn').click();
-//   }
-// })
+document.body.addEventListener("keypress", function(event){
+  if(event.key == 'Enter'){
+    document.getElementById('search-btn').click();
+  }
+})
 
 
 // Bonus Work

@@ -92,3 +92,11 @@ img {
 font-size: 300%;
 transition: 0.5s;
 }
+/* Bonus Part */
+
+#display-image {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#display-image:hover {opacity: 0.7;}
