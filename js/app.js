@@ -17,18 +17,22 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 const showImages = (images) => {
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
+  toggleSpinner();
   // show gallery title
   galleryHeader.style.display = 'flex';
   images.forEach(image => {
     let div = document.createElement('div');
-    div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+    div.className = 'col-md-3 img-item mb-2 d-flex';
+    div.innerHTML = `<div id='img-container'>
+    <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}"> <a onclick="clicked()" id="zoom"><i class="fas fa-search-plus"></i></a>
+    </div>`;
     gallery.appendChild(div)
   })
 
 }
 
 const getImages = (query) => {
+  toggleSpinner();
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
@@ -37,14 +41,15 @@ const getImages = (query) => {
 
 let slideIndex = 0;
 const selectItem = (event, img) => {
+
   let element = event.target;
-  element.classList.toggle('added'); 
+  element.classList.toggle('added');
   let item = sliders.indexOf(img);
 
-  if (item === -1) {  
+  if (item === -1) {
     sliders.push(img);
-  } else {   
-    sliders.pop(img);    
+  } else {
+    sliders.pop(img);
   }
 }
 var timer
@@ -77,13 +82,17 @@ const createSlider = () => {
     item.innerHTML = `<img class="w-100"
     src="${slide}"
     alt="">`;
-    sliderContainer.appendChild(item)
+    sliderContainer.appendChild(item);
+
   })
+  
+
   changeSlide(0)
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
   }, setDuration(duration));
+
 }
 
 // change slider index 
@@ -124,31 +133,32 @@ sliderBtn.addEventListener('click', function () {
   createSlider()
 })
 
-// Slide duration
+// Slide negative input duration handle
 function validate(event) {
   if (event.key == "-") {
     event.preventDefault();
     return false;
   }
-  
-}    
 
-function setDuration(duration){
-  if (duration>0 && duration<=10){
+}
+
+function setDuration(duration) {
+  if (duration > 0 && duration <= 10) {
     duration = duration * 1000;
     return duration;
-  }
-  else{
-    duration =  document.getElementById('duration').value || 1000;
+  } 
+  else {
+    duration = document.getElementById('duration').value || 1000;
     return duration;
   }
- 
+
 }
+
 // Keyboard enter press on search button
 
-document.getElementById('search').addEventListener("keypress", function(event){
+document.getElementById('search').addEventListener("keypress", function (event) {
   //event.preventDefault();  
-  if(event.key == 'Enter'){
+  if (event.key == 'Enter') {
     document.getElementById('search-btn').click();
   }
 })
@@ -158,15 +168,20 @@ document.getElementById('search').addEventListener("keypress", function(event){
 //   }
 // })
 
+
 // Bonus Work
 // Image model box
 const imgBox = document.getElementsByClassName('image-box');
-imgBox.onclick = function (){
-  
+imgBox.onclick = function () {
+
 }
 // Spinner
+const toggleSpinner = () => {
+  const spinner = document.getElementById('toggle-spinner');
+  spinner.classList.toggle('d-none');
+}
 
-const toggleSpinner = () =>{
-const spinner = document.getElementById('loading-spinner');
-spinner.classList.toggle('d-block');
+
+function clicked() {
+  console.log('someone clicked me');
 }
